@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../CSS_/login.css">
+</head>
+<body>
+    <div class="logMin">
+      <form class="logform">
+        <input
+          class="logusername"
+          type="text"
+          placeholder="username"
+        />  
+        <input
+          class="logpassword"
+          type="password"
+          maxLength={8}
+          placeholder="****"
+        />
+        <button
+          id="logButton"
+        >
+          sign in
+        </button>
+      </form>
+    </div>
+
+    <script>
+      const logButton = document.getElementById('logButton');
+      logButton.addEventListener('click', function() {
+          window.location.href = 'HTML_/index.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+.logMin{
+    height: 100%;
+    overflow: hidden;
+    justify-content: center;
+    background-color: gold;
+}
+
+.logform{   
+    border-radius: 8px;
+    height: 280px;
+    width: 400px;
+    display: grid;
+    margin-left: 35%;
+    margin-top: 10%;
+    background-color:white;
+    padding: 1rem;
+
+}
+
+.logform input{
+    margin-top: 5%;
+    border: solid 2pt green;
+    background-color: transparent;
+    border-radius: 8px;
+    height: 40px;
+    outline: none;
+    padding: 1%;
+    text-align: center;
+    color: black;
+    
+}
+
+#logbutton{
+    height: 45px;
+    width: 50%;
+    border-radius: 8px;
+    background-color: green;
+    color: white;
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    cursor: pointer;
+    margin-top: 5%;
+    border: none;
+    margin-left: 25%;
+}
+
+.logbutton :hover{
+    transform: scale(1.2);
+}
