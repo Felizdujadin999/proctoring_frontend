@@ -29,10 +29,12 @@
     </div>
 
     <script>
-      const logButton = document.getElementById('logButton');
-      logButton.addEventListener('click', function() {
-          window.location.href = 'HTML_/index.html';
-        });
-    </script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const logButton = document.getElementById('logButton');
+          logButton.addEventListener('click', function() {
+              window.location.href = '../HTML_/index.html';
+          });
+      });
+  </script>
 </body>
 </html>
