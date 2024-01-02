@@ -1,0 +1,126 @@
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+  }
+
+  .video-container {
+    border: solid 2pt whitesmoke;
+    justify-content: space-between;
+    width: 640px;
+    height: 320px;
+    margin-bottom: 20px;
+  }
+
+  .video {
+    width: 300px;
+    height: 225px;
+    border: 1px solid black;
+    margin: 1%;
+  
+  }
+
+  #webcamButton{
+    width: 25%;
+    height: 45px;
+    border-radius: 8px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    cursor: pointer;
+    margin: 0.5%;
+    border: none;
+  }
+
+  #screenShareButton {
+    width: 25%;
+    height: 45px;
+    border-radius: 8px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    cursor: pointer;
+    margin: 0.5%;
+    border: none;
+  }
+
+  #question{
+    border: solid 2pt whitesmoke;
+    height: 50%;
+    background-color: #cccccca1;
+    
+  }
+
+  #question p{
+    margin-left: 2rem;
+  }
+
+  #questions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width:540px;
+    height: 550px;
+    background-color: #000000;
+    padding: 10px;
+    border: 1px solid #ccc;
+    
+  }
+
+  #options {
+    margin-top: 20px;
+    background-color: #cccccca1;
+    padding: 1%;
+   
+  }
+
+  #optionA,#optionB,#optionC,#optionD{
+    width: 90%;
+    height: 35px;
+    border-radius: 8px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    cursor: pointer;
+    margin: 1%;
+    margin-left: 5%;
+    border: none;
+  }
+
+
+  .option {
+ 
+  }
+
+  .startButtons{
+    display: flex;
+  }
+
+  .endbuttons{
+    display: flex;
+    padding: 1%;
+    
+  }
+
+  #finishTest, #quitTest{
+    width: 50%;
+    height: 45px;
+    border-radius: 8px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    cursor: pointer;
+    margin: 1%;
+    margin-left: 5%;
+    border: none;
+  }
+
+
+
+  #finishTestButton {
+    display: none;
+  }
