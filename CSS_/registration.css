@@ -1,69 +1,75 @@
-body, h1, h2, form {
-    margin: 0;
-    padding: 0;
-  }
+.regMin{
+  height: 100%;
+  overflow: hidden;
+  justify-content: center;
+  background-color: rgb(0, 0, 0);
+}
+
+.regform{   
+  border-radius: 8px;
+  height: 320px;
+  width: 300px;
+  display: grid;
+  margin-left: 36%;
+  margin-top: 10%;
+  background-color:rgba(255, 255, 255, 0.856);
+  padding: 1rem;
+
+}
+
+h2{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-align: center;
+  font-weight: 300;
+  font-size: 1.3rem;
+}
+
+.regform input{
+  margin-top: 5%;
+  border: solid 2pt rgb(0, 0, 0);
+  background-color: transparent;
+  border-radius: 8px;
+  height: 40px;
+  outline: none;
+  padding: 1%;
+  text-align: center;
+  color: black;
   
-  body {
-    font-family: Arial, sans-serif;
-    background-color: gold;
-  }
-  
-  .container {
-    max-width: 400px;
-    margin: 50px auto;
-    background-color: #fff;
-    margin-left: 35%;
-    margin-top: 10%;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h2 {
-    text-align: center;
-    color: #333;
-  }
-  
-  form {
-    margin-top: 20px;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-  }
-  
-  input {
-    text-align: center;
-    width: 100%;
-    padding: 3%;
-    border: solid 2pt green;
-    background-color: transparent;
-    box-sizing: border-box;
-    color: black;
-    border-radius: 8px;
-  }
-  
-  button {
-    height: 45px;
-    width: 50%;
-    border-radius: 8px;
-    background-color: green;
-    color: white;
-    font-size: large;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    margin-left: 25%;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
+}
+
+.regcohort{
+  margin-top: 5%;
+  border: solid 2pt rgb(0, 0, 0);
+  background-color: transparent;
+  border-radius: 8px;
+  height: 40px;
+  outline: none;
+  padding: 1%;
+  text-align: center;
+  color: black;
+}
+
+option{
+  color: black;
+}
+
+
+
+#regbutton{
+  height: 40px;
+  width: 100%;
+  border-radius: 8px;
+  background-color: rgb(0, 0, 0);;
+  color: white;
+  font-size: large;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  cursor: pointer;
+  margin-top: 5%;
+  border: none;
+ 
+}
+
+#regbutton:hover {
+  background-color: #1c1d1c;
+}
+

@@ -2,30 +2,31 @@
     height: 100%;
     overflow: hidden;
     justify-content: center;
-    background-color: gold;
-}
-
-.logform{   
+    background-color: rgb(0, 0, 0);
+  }
+  
+  .logform{   
     border-radius: 8px;
-    height: 280px;
-    width: 400px;
+    height: 320px;
+    width: 300px;
     display: grid;
-    margin-left: 35%;
+    margin-left: 36%;
     margin-top: 10%;
-    background-color:white;
+    background-color:rgba(255, 255, 255, 0.856);
     padding: 1rem;
-
-}
-
-h2{
+  
+  }
+  
+  h2{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
-    font-weight: 900;
-    font-size: 1.6rem;
-}
-
-.logform input{
+    font-weight: 300;
+    font-size: 1.3rem;
+  }
+  
+  .logform input{
     margin-top: 5%;
-    border: solid 2pt green;
+    border: solid 2pt rgb(0, 0, 0);
     background-color: transparent;
     border-radius: 8px;
     height: 40px;
@@ -34,23 +35,25 @@ h2{
     text-align: center;
     color: black;
     
-}
-
-#logbutton{
+  }
+  
+  
+  
+  #logbutton{
     height: 45px;
-    width: 50%;
+    width: 100%;
     border-radius: 8px;
-    background-color: green;
+    background-color: rgb(0, 0, 0);
     color: white;
     font-size: large;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     cursor: pointer;
     margin-top: 5%;
     border: none;
-    margin-left: 25%;
-}
-
-#logbutton:hover {
-    background-color: #45a049;
+  
+  }
+  
+  #logbutton:hover {
+    background-color: #1c1d1c;
   }
   
