@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Page</title>
+  <link rel="stylesheet" href="../CSS_/test.css">
+</head>
+<body>
+  <div class="video-container">
+    <video id="userVideo" class="video" autoplay></video>
+    <video id="screenVideo" class="video" autoplay></video>
+  </div>
+  <div class="startButtons">
+    <button id="webcamButton" onclick="startWebcam()">Start Webcam</button>
+    <button id="screenShareButton" onclick="startScreenShare()">Share Screen</button>
+  </div>
+  <div id="timer">
+    <p id="countdown"></p>
+  </div>
+
+  <div id="questions">
+    <div id="question">
+      <p>Question 1: What is...?</p>
+    </div>
+
+    <div id="options">
+      <div class="option">
+        <button id="optionA" onclick="selectOption('A')">A</button>
+      </div>
+      <div class="option">
+        <button id="optionB" onclick="selectOption('B')">B</button>
+      </div>
+      <div class="option">
+        <button id="optionC" onclick="selectOption('C')">C</button>
+      </div>
+      <div class="option">
+        <button id="optionD" onclick="selectOption('D')">D</button>
+      </div>
+    </div>
+    <div class="endbuttons">
+      <button id="finishTest" onclick="finishTest()">Finish Test</button>
+      <button id="quitTest" onclick="quitTest()">Quit Test</button>
+    </div>
+  </div>
+
+  <script>
+    let userStream;
+    let screenStream;
+
+    function startWebcam() {
+      const userVideo = document.getElementById('userVideo');
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (streamObj) {
+          userStream = streamObj;
+          userVideo.srcObject = userStream;
+          document.getElementById('screenShareButton').style.display = 'block';
+        })
+        .catch(function (err) {
+          console.log("Error accessing the webcam: " + err);
+        });
+    }
+
+    function startScreenShare() {
+      navigator.mediaDevices.getDisplayMedia({ video: true })
+        .then(function (screenStreamObj) {
+          screenStream = screenStreamObj;
+          const screenVideo = document.getElementById('screenVideo');
+          screenVideo.srcObject = screenStream;
+        })
+        .catch(function (err) {
+          console.log("Error sharing the screen: " + err);
+        });
+    }
+
+    function finishTest() {
+      // Handle finishing the test (stop screen sharing, webcam, etc.)
+      stopWebcam();
+      stopScreenShare();
+      document.getElementById('questions').style.display = 'none';
+      document.getElementById('finishTestButton').style.display = 'block';
+    }
+
+    function quitTest() {
+      // Handle quitting the test (stop screen sharing, webcam, etc.)
+      stopWebcam();
+      stopScreenShare();
+      document.getElementById('questions').style.display = 'none';
+      document.getElementById('finishTestButton').style.display = 'block';
+    }
+
+    function stopWebcam() {
+      if (userStream) {
+        userStream.getTracks().forEach(track => {
+          track.stop();
+        });
+      }
+      const userVideo = document.getElementById('userVideo');
+      userVideo.srcObject = null;
+    }
+
+    function stopScreenShare() {
+      if (screenStream) {
+        screenStream.getTracks().forEach(track => {
+          track.stop();
+        });
+      }
+      const screenVideo = document.getElementById('screenVideo');
+      screenVideo.srcObject = null;
+    }
+
+    function selectOption(option) {
+      // Handle option selection logic here
+      console.log("Selected Option: " + option);
+      // You can add logic to track the selected option
+    }
+
+    // Countdown timer function
+    function startTimer(duration, display) {
+      let timer = duration,
+        minutes, seconds;
+      setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+          timer = duration;
+        }
+      }, 1000);
+    }
+
+    window.onload = function () {
+      let duration = 60 * 10; // 10 minutes
+      let display = document.querySelector('#countdown');
+      startTimer(duration, display);
+    };
+  </script>
+</body>
+</html>

@@ -3,38 +3,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
-    <link rel="stylesheet" href="../CSS_/login.css">
+    <link rel="stylesheet" href="../CSS_/registration.css">
 </head>
 <body>
-    <div class="logMin">
-      <form class="logform">
+    <div class="regMin">
+      <form class="regform" id="registrationForm">
         <h2>Register</h2>
         <input
-          class="logusername"
+          class="regusername"
           type="text"
           placeholder="username"
+          id="usernameInput"
         />  
+       
+        <select id="c" class="regcohort">
+          <option value="ch" id="selectch">Select Cohort:</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+        </select>
         <input
-          class="logpassword"
+          class="regpassword"
           type="password"
-          maxLength={8}
+          maxLength="8" 
           placeholder="****"
+          id="passwordInput"
         />
         <button
-          id="logButton"
+          id="regButton"
         >
           Sign Up
         </button>
       </form>
     </div>
-
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const logButton = document.getElementById('logButton');
-            logButton.addEventListener('click', function() {
-                window.location.href = 'HTML_/index.html';
+        function generateRandomKey(length) {
+            const wordArray = CryptoJS.lib.WordArray.random(length);
+            return wordArray.toString();
+        }
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            const regButton = document.getElementById('regButton');
+            regButton.addEventListener('click', function (event) {
+                event.preventDefault(); 
+    
+                const username = document.getElementById('usernameInput').value;
+                const cohort = document.getElementById('c').value;
+                const password = document.getElementById('passwordInput').value;
+                const secretKey = generateRandomKey(32);
+    
+                const key = CryptoJS.enc.Hex.parse(secretKey); 
+                const data = CryptoJS.AES.encrypt(JSON.stringify({
+                    username: username,
+                    cohort: cohort,
+                    password: password
+                }), key, {
+                    mode: CryptoJS.mode.ECB, 
+                    padding: CryptoJS.pad.Pkcs7 
+                }).toString();
+    
+                fetch('http://localhost:3000/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ data }), 
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Registration successful!');
+                })
+                .catch(error => {
+                    alert('Registration failed: ' + error.message);
+                });
             });
         });
     </script>
+    
+  
 </body>
 </html>
