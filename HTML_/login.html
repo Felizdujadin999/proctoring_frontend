@@ -9,7 +9,7 @@
     <div class="logMin">
       <form class="logform">
         <h2>Login</h2>
-        <input mongodb:
+        <input
           class="logusername"
           id="usernameInput"
           type="text"
@@ -19,7 +19,7 @@
           class="logpassword"
           id="passwordInput"
           type="password"
-          maxLength={8}
+          maxLength="8"
           placeholder="****"
         />
         <button
@@ -30,47 +30,54 @@
       </form>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          const logButton = document.getElementById('logButton');
-          logButton.addEventListener('click', function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            const logButton = document.getElementById('logButton');
+            logButton.addEventListener('click', function() {
+                const username = document.getElementById('usernameInput').value;
+                const password = document.getElementById('passwordInput').value;
 
-              const username = document.getElementById('usernameInput').value;
-              const password = document.getElementById('passwordInput').value;
-  
-              const loginData = {
-                  username: username,
-                  password: password
-              };
+                // Encrypt login data
+                const secretKey = generateRandomKey(32);
+                const key = CryptoJS.enc.Hex.parse(secretKey);
+                const loginData = CryptoJS.AES.encrypt(JSON.stringify({
+                    username: username,
+                    password: password
+                }), key, {
+                    mode: CryptoJS.mode.ECB,
+                    padding: CryptoJS.pad.Pkcs7
+                }).toString();
 
-              fetch('http://localhost:3000/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            body: JSON.stringify(loginData),
+                fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ data: loginData }),
                 })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok.');
                     }
-                    console.log(response.json());
                     return response.json();
                 })
                 .then(data => {
-                
-                  console.log('login successful!', data.json());
-
-                
-                    const queryParams = new URLSearchParams(loginData).toString();
+                    console.log('login successful!', data);
+                    // Redirect or do something with the response data
+                    const queryParams = new URLSearchParams({ username: username }).toString();
                     window.location.href = './onboarding.html?' + queryParams;
                 })
                 .catch(error => {
                     console.log('login failed: ' + error.message);
                 });
-                    
-                  });
-              });
-  </script>
+            });
+        });
+
+        function generateRandomKey(length) {
+            const wordArray = CryptoJS.lib.WordArray.random(length);
+            return wordArray.toString();
+        }
+    </script>
 </body>
 </html>
