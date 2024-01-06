@@ -1,11 +1,11 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <link rel="stylesheet" href="../CSS_/login.css">
-</head>
-<body>
+    <link rel="stylesheet" href="../CSS_/login.css" />
+  </head>
+  <body>
     <div class="logMin">
       <form class="logform">
         <h2>Login</h2>
@@ -14,70 +14,87 @@
           id="usernameInput"
           type="text"
           placeholder="username"
-        />  
+        />
         <input
           class="logpassword"
           id="passwordInput"
           type="password"
-          maxLength="8"
+          maxlength="8"
           placeholder="****"
         />
-        <button
-          id="logButton"
-        >
-          Sign In
-        </button>
+        <button id="logButton">Sign In</button>
       </form>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const logButton = document.getElementById('logButton');
-            logButton.addEventListener('click', function() {
-                const username = document.getElementById('usernameInput').value;
-                const password = document.getElementById('passwordInput').value;
+      fetch("http://localhost:3000/api/getLoginKey")
+        .then((response) => response.json())
+        .then((data) => {
+          const secretKey = data;
+          console.log(data);
+          console.log("this is key fe", JSON.stringify(secretKey));
 
-                // Encrypt login data
-                const secretKey = generateRandomKey(32);
-                const key = CryptoJS.enc.Hex.parse(secretKey);
-                const loginData = CryptoJS.AES.encrypt(JSON.stringify({
-                    username: username,
-                    password: password
-                }), key, {
-                    mode: CryptoJS.mode.ECB,
-                    padding: CryptoJS.pad.Pkcs7
-                }).toString();
+          const logButton = document.getElementById("logButton");
+          logButton.addEventListener("click", function (event) {
+            event.preventDefault();
 
-                fetch('http://localhost:3000/api/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ data: loginData }),
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('login successful!', data);
-                    // Redirect or do something with the response data
-                    const queryParams = new URLSearchParams({ username: username }).toString();
-                    window.location.href = './onboarding.html?' + queryParams;
-                })
-                .catch(error => {
-                    console.log('login failed: ' + error.message);
-                });
+            const username = document.getElementById("usernameInput").value;
+            const password = document.getElementById("passwordInput").value;
+
+            console.log(username, password);
+
+            const dataToEncrypt = JSON.stringify({
+              username: username,
+              password: password,
             });
-        });
 
-        function generateRandomKey(length) {
-            const wordArray = CryptoJS.lib.WordArray.random(length);
-            return wordArray.toString();
-        }
+            console.log("this is key: ", secretKey);
+
+            function encryptData(dataToEncrypt, secretKey) {
+              try {
+                const key = CryptoJS.enc.Hex.parse(secretKey);
+                const encrypted = CryptoJS.AES.encrypt(dataToEncrypt, key, {
+                  mode: CryptoJS.mode.ECB,
+                  padding: CryptoJS.pad.Pkcs7,
+                });
+
+                return encrypted.toString();
+              } catch (error) {
+                console.error("Encryption error:", error);
+                return null;
+              }
+            }
+            const encrypteData = encryptData(dataToEncrypt, secretKey);
+            console.log("Encrypted Data:", encrypteData);
+
+            fetch("http://localhost:3000/api/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                data: encrypteData,
+              }),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Network response was not ok.");
+                }
+                return response.json();
+                
+              })
+              .then((data) => {
+                alert("Login successful!");
+              })
+              .catch((error) => {
+                alert("Login failed: " + error.message);
+              });
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching key:", error);
+        });
     </script>
-</body>
+  </body>
 </html>
