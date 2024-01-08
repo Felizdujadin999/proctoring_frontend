@@ -12,12 +12,16 @@
   <div class="startButtons">
     <button id="webcamButton" onclick="startWebcam()">Start Webcam</button>
     <button id="screenShareButton" onclick="startScreenShare()">Share Screen</button>
+    <button id="startTestButton" style="display: none;" onclick="startTest()">Start Test</button>
   </div>
   <div id="timer">
     <p id="countdown"></p>
   </div>
+  <div id="instructions">
+    <p>Please read the question properly before attemping to answer!</p>
+  </div>
 
-  <div id="questions">
+  <div id="questions" style="display: none;">
     <div id="question">
       <p>Question 1: What is...?</p>
     </div>
@@ -45,6 +49,8 @@
   <script>
     let userStream;
     let screenStream;
+    let countdownTimer;
+    let timeLeft = 1800; // 30 minutes in seconds
 
     function startWebcam() {
       const userVideo = document.getElementById('userVideo');
@@ -53,6 +59,7 @@
           userStream = streamObj;
           userVideo.srcObject = userStream;
           document.getElementById('screenShareButton').style.display = 'block';
+          document.getElementById('startTestButton').style.display = 'block';
         })
         .catch(function (err) {
           console.log("Error accessing the webcam: " + err);
@@ -65,26 +72,41 @@
           screenStream = screenStreamObj;
           const screenVideo = document.getElementById('screenVideo');
           screenVideo.srcObject = screenStream;
+          document.getElementById('startTestButton').style.display = 'block';
         })
         .catch(function (err) {
           console.log("Error sharing the screen: " + err);
         });
     }
 
+    function startTest() {
+      document.getElementById('startTestButton').style.display = 'none';
+      document.getElementById('webcamButton').style.display = 'none';
+      document.getElementById('screenShareButton').style.display = 'none';
+      document.getElementById('timer').style.display = 'block';
+      document.getElementById('questions').style.display = 'block';
+      startTimer();
+      lockTab();
+    }
+
     function finishTest() {
-      // Handle finishing the test (stop screen sharing, webcam, etc.)
+      clearInterval(countdownTimer);
       stopWebcam();
       stopScreenShare();
       document.getElementById('questions').style.display = 'none';
-      document.getElementById('finishTestButton').style.display = 'block';
+      document.getElementById('timer').style.display = 'none';
+      document.getElementById('startTestButton').style.display = 'none';
+      releaseTab();
     }
 
     function quitTest() {
-      // Handle quitting the test (stop screen sharing, webcam, etc.)
+      clearInterval(countdownTimer);
       stopWebcam();
       stopScreenShare();
       document.getElementById('questions').style.display = 'none';
-      document.getElementById('finishTestButton').style.display = 'block';
+      document.getElementById('timer').style.display = 'none';
+      document.getElementById('startTestButton').style.display = 'none';
+      releaseTab();
     }
 
     function stopWebcam() {
@@ -113,30 +135,29 @@
       // You can add logic to track the selected option
     }
 
-    // Countdown timer function
-    function startTimer(duration, display) {
-      let timer = duration,
-        minutes, seconds;
-      setInterval(function () {
-        minutes = parseInt(timer / 60, 10);
-        seconds = parseInt(timer % 60, 10);
-
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-
-        display.textContent = minutes + ":" + seconds;
-
-        if (--timer < 0) {
-          timer = duration;
+    function startTimer() {
+      countdownTimer = setInterval(function () {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('countdown').innerHTML = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        if (timeLeft <= 0) { 
+          clearInterval(countdownTimer);
+          finishTest();
         }
       }, 1000);
     }
 
-    window.onload = function () {
-      let duration = 60 * 10; // 10 minutes
-      let display = document.querySelector('#countdown');
-      startTimer(duration, display);
+    function lockTab() {
+      window.onbeforeunload = ()=> {
+      return "Are you sure you want to leave? Your changes may not be saved oo.";
     };
+      
+    }
+
+    function releaseTab() {
+      
+    }
   </script>
 </body>
 </html>

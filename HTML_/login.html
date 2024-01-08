@@ -7,7 +7,7 @@
   </head>
   <body>
     <div class="logMin">
-      <form class="logform">
+      <form class="logform" id="loginform">
         <h2>Login</h2>
         <input
           class="logusername"
@@ -25,6 +25,12 @@
         <button id="logButton">Sign In</button>
       </form>
     </div>
+    <div id="logSuccessMessage" style="display: none">
+      <p>Login successful!</p>
+    </div>
+    <div id="logFailedMessage">
+      <p>Login failed!</p>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
@@ -32,8 +38,6 @@
         .then((response) => response.json())
         .then((data) => {
           const secretKey = data;
-          console.log(data);
-          console.log("this is key fe", JSON.stringify(secretKey));
 
           const logButton = document.getElementById("logButton");
           logButton.addEventListener("click", function (event) {
@@ -42,14 +46,10 @@
             const username = document.getElementById("usernameInput").value;
             const password = document.getElementById("passwordInput").value;
 
-            console.log(username, password);
-
             const dataToEncrypt = JSON.stringify({
               username: username,
               password: password,
             });
-
-            console.log("this is key: ", secretKey);
 
             function encryptData(dataToEncrypt, secretKey) {
               try {
@@ -66,7 +66,6 @@
               }
             }
             const encrypteData = encryptData(dataToEncrypt, secretKey);
-            console.log("Encrypted Data:", encrypteData);
 
             fetch("http://localhost:3000/api/login", {
               method: "POST",
@@ -82,13 +81,24 @@
                   throw new Error("Network response was not ok.");
                 }
                 return response.json();
-                
               })
               .then((data) => {
-                alert("Login successful!");
+                const successMessage = document.getElementById("logSuccessMessage");
+                const logForm = document.getElementById("loginform");
+                logForm.style.display = "none";
+                successMessage.style.display = "block";
+                setTimeout(function () {
+                  window.location.href = "../HTML_/onboarding.html";
+                }, 1000);
               })
               .catch((error) => {
-                alert("Login failed: " + error.message);
+                const failedMessage =
+                  document.getElementById("logFailedMessage");
+                failedMessage.style.display = "block";
+                failedMessage.style.opacity = 1;
+                setTimeout(() => {
+                  failedMessage.style.display = "none";
+                }, 2000);
               });
           });
         })
