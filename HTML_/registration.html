@@ -33,6 +33,12 @@
         <button id="regButton">Sign Up</button>
       </form>
     </div>
+    <div id="regSuccessMessage" style="display: none">
+      <p>Registration successful!</p>
+    </div>
+    <div id="regFailedMessage">
+      <p>Registration failed!</p>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
@@ -40,8 +46,6 @@
         .then((response) => response.json())
         .then((data) => {
           const secretKey = data;
-          console.log(data);
-          console.log("this is key fe", JSON.stringify(secretKey));
 
           const regButton = document.getElementById("regButton");
           regButton.addEventListener("click", function (event) {
@@ -51,15 +55,11 @@
             const cohort = document.getElementById("c").value;
             const password = document.getElementById("passwordInput").value;
 
-            console.log(username, cohort, password);
-
             const dataToEncrypt = JSON.stringify({
               username: username,
               cohort: cohort,
               password: password,
             });
-
-            console.log("this is key: ", secretKey);
 
             function encryptData(dataToEncrypt, secretKey) {
               try {
@@ -76,8 +76,6 @@
               }
             }
             const encrypteData = encryptData(dataToEncrypt, secretKey);
-            console.log("Encrypted Data:", encrypteData);
-
 
             fetch("http://localhost:3000/api/register", {
               method: "POST",
@@ -86,7 +84,6 @@
               },
               body: JSON.stringify({
                 data: encrypteData,
-                
               }),
             })
               .then((response) => {
@@ -96,10 +93,26 @@
                 return response.json();
               })
               .then((data) => {
-                alert("Registration successful!");
+                const successMessage =
+                  document.getElementById("regSuccessMessage");
+                const regForm = document.getElementById("registrationForm");
+
+                regForm.style.display = "none";
+
+                successMessage.style.display = "block";
+
+                setTimeout(function () {
+                  window.location.href = "../HTML_/onboarding.html";
+                }, 1000);
               })
               .catch((error) => {
-                alert("Registration failed: " + error.message);
+                const failedMessage =
+                  document.getElementById("regFailedMessage");
+                failedMessage.style.display = "block";
+                failedMessage.style.opacity = 1;
+                setTimeout(() => {
+                  failedMessage.style.display = "none";
+                }, 2000);
               });
           });
         })

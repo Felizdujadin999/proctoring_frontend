@@ -21,7 +21,7 @@ body {
   }
 
   #webcamButton{
-    width: 25%;
+    width: 17%;
     height: 45px;
     border-radius: 8px;
     background-color: rgb(255, 255, 255);
@@ -29,12 +29,12 @@ body {
     font-size: large;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     cursor: pointer;
-    margin: 0.5%;
+    margin: 0.4%;
     border: none;
   }
 
   #screenShareButton {
-    width: 25%;
+    width: 17%;
     height: 45px;
     border-radius: 8px;
     background-color: rgb(255, 255, 255);
@@ -42,7 +42,20 @@ body {
     font-size: large;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     cursor: pointer;
-    margin: 0.5%;
+    margin: 0.4%;
+    border: none;
+  }
+
+  #startTestButton{
+    width: 17%;
+    height: 45px;
+    border-radius: 8px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    cursor: pointer;
+    margin: 0.4%;
     border: none;
   }
 
@@ -91,10 +104,6 @@ body {
   }
 
 
-  .option {
- 
-  }
-
   .startButtons{
     display: flex;
   }
@@ -123,4 +132,32 @@ body {
 
   #finishTestButton {
     display: none;
+  }
+
+  #timer{
+    width: 52.7%;
+    height: 55px;
+    border-radius: 8px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    cursor: pointer;
+    margin: 0.4%;
+    border: none;
+    text-align: center;
+  }
+
+  #instructions{
+    width: 52.7%;
+    height: 55px;
+    border-radius: 8px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    cursor: pointer;
+    margin: 0.4%;
+    border: none; 
+    text-align: center;
   }

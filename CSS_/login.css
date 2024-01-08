@@ -57,3 +57,37 @@
     background-color: #1c1d1c;
   }
   
+  #logSuccessMessage{
+    position: absolute;
+    top: 30%;
+    background-color: rgba(255, 255, 255, 0.815);
+    height: 40px;
+    width: 300px;
+    border-radius: 8px;
+    margin-left: 38%;
+    color: black;
+    text-align: center;
+    font-size: 21px;
+    font-weight: 400;
+    padding-bottom: 2%;
+  }
+  
+  #logFailedMessage{
+    display: none;
+    opacity: 0;
+    transition: step-start 1.5  ease-in-out ;
+    position: absolute;
+    top: 10%;
+    background-color: rgba(235, 93, 93, 0.973);
+    height: 40px;
+    width: 335px;
+    border-radius: 8px;
+    margin-left: 35.5%;
+    color: black;
+    text-align: center;
+    font-size: 21px;
+    font-weight: 400;
+    padding-bottom: 2%;
+  }
+  
+  
