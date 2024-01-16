@@ -1,163 +1,73 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Test Page</title>
-  <link rel="stylesheet" href="../CSS_/test.css">
-</head>
-<body>
-  <div class="video-container">
-    <video id="userVideo" class="video" autoplay></video>
-    <video id="screenVideo" class="video" autoplay></video>
-  </div>
-  <div class="startButtons">
-    <button id="webcamButton" onclick="startWebcam()">Start Webcam</button>
-    <button id="screenShareButton" onclick="startScreenShare()">Share Screen</button>
-    <button id="startTestButton" style="display: none;" onclick="startTest()">Start Test</button>
-  </div>
-  <div id="timer">
-    <p id="countdown"></p>
-  </div>
-  <div id="instructions">
-    <p>Please read the question properly before attemping to answer!</p>
-  </div>
-
-  <div id="questions" style="display: none;">
-    <div id="question">
-      <p>Question 1: What is...?</p>
+  <head>
+    <title>Test Page</title>
+    <link rel="stylesheet" href="../CSS_/test.css" />
+  </head>
+  <body>
+    <div class="video-container">
+      <video
+        id="userVideo"
+        class="video"
+        width="300"
+        height="250"
+        autoplay
+        muted
+      ></video>
+      <video
+        id="screenVideo"
+        class="video"
+        width="300"
+        height="250"
+        autoplay
+      ></video>
+      <canvas id="overlay" class="video"></canvas>
+    </div>
+    <div class="startButtons">
+      <button id="webcamButton" onclick="startFaceApi()">Start Webcam</button>
+      <button id="screenShareButton" onclick="startScreenShare()">
+        Share Screen
+      </button>
+      <button id="startTestButton" style="display: none" onclick="startTest()">
+        Start Test
+      </button>
+    </div>
+    <div id="timer">
+      <p id="countdown"></p>
+    </div>
+    <div id="instructions">
+      <p>Please read the question properly before attemping to answer!</p>
     </div>
 
-    <div id="options">
-      <div class="option">
-        <button id="optionA" onclick="selectOption('A')">A</button>
+    <div id="questions" style="display: none">
+      <div id="question">
+        <p>Question 1: What is...?</p>
       </div>
-      <div class="option">
-        <button id="optionB" onclick="selectOption('B')">B</button>
+
+      <div id="options">
+        <div class="option">
+          <button id="optionA" onclick="selectOption('A')">A</button>
+        </div>
+        <div class="option">
+          <button id="optionB" onclick="selectOption('B')">B</button>
+        </div>
+        <div class="option">
+          <button id="optionC" onclick="selectOption('C')">C</button>
+        </div>
+        <div class="option">
+          <button id="optionD" onclick="selectOption('D')">D</button>
+        </div>
       </div>
-      <div class="option">
-        <button id="optionC" onclick="selectOption('C')">C</button>
-      </div>
-      <div class="option">
-        <button id="optionD" onclick="selectOption('D')">D</button>
+      <div class="endbuttons">
+        <button id="finishTest" onclick="finishTest()">Finish Test</button>
+        <button id="quitTest" onclick="quitTest()">Quit Test</button>
       </div>
     </div>
-    <div class="endbuttons">
-      <button id="finishTest" onclick="finishTest()">Finish Test</button>
-      <button id="quitTest" onclick="quitTest()">Quit Test</button>
-    </div>
-  </div>
 
-  <script>
-    let userStream;
-    let screenStream;
-    let countdownTimer;
-    let timeLeft = 1800; // 30 minutes in seconds
-
-    function startWebcam() {
-      const userVideo = document.getElementById('userVideo');
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(function (streamObj) {
-          userStream = streamObj;
-          userVideo.srcObject = userStream;
-          document.getElementById('screenShareButton').style.display = 'block';
-          document.getElementById('startTestButton').style.display = 'block';
-        })
-        .catch(function (err) {
-          console.log("Error accessing the webcam: " + err);
-        });
-    }
-
-    function startScreenShare() {
-      navigator.mediaDevices.getDisplayMedia({ video: true })
-        .then(function (screenStreamObj) {
-          screenStream = screenStreamObj;
-          const screenVideo = document.getElementById('screenVideo');
-          screenVideo.srcObject = screenStream;
-          document.getElementById('startTestButton').style.display = 'block';
-        })
-        .catch(function (err) {
-          console.log("Error sharing the screen: " + err);
-        });
-    }
-
-    function startTest() {
-      document.getElementById('startTestButton').style.display = 'none';
-      document.getElementById('webcamButton').style.display = 'none';
-      document.getElementById('screenShareButton').style.display = 'none';
-      document.getElementById('timer').style.display = 'block';
-      document.getElementById('questions').style.display = 'block';
-      startTimer();
-      lockTab();
-    }
-
-    function finishTest() {
-      clearInterval(countdownTimer);
-      stopWebcam();
-      stopScreenShare();
-      document.getElementById('questions').style.display = 'none';
-      document.getElementById('timer').style.display = 'none';
-      document.getElementById('startTestButton').style.display = 'none';
-      releaseTab();
-    }
-
-    function quitTest() {
-      clearInterval(countdownTimer);
-      stopWebcam();
-      stopScreenShare();
-      document.getElementById('questions').style.display = 'none';
-      document.getElementById('timer').style.display = 'none';
-      document.getElementById('startTestButton').style.display = 'none';
-      releaseTab();
-    }
-
-    function stopWebcam() {
-      if (userStream) {
-        userStream.getTracks().forEach(track => {
-          track.stop();
-        });
-      }
-      const userVideo = document.getElementById('userVideo');
-      userVideo.srcObject = null;
-    }
-
-    function stopScreenShare() {
-      if (screenStream) {
-        screenStream.getTracks().forEach(track => {
-          track.stop();
-        });
-      }
-      const screenVideo = document.getElementById('screenVideo');
-      screenVideo.srcObject = null;
-    }
-
-    function selectOption(option) {
-      // Handle option selection logic here
-      console.log("Selected Option: " + option);
-      // You can add logic to track the selected option
-    }
-
-    function startTimer() {
-      countdownTimer = setInterval(function () {
-        timeLeft--;
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        document.getElementById('countdown').innerHTML = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        if (timeLeft <= 0) { 
-          clearInterval(countdownTimer);
-          finishTest();
-        }
-      }, 1000);
-    }
-
-    function lockTab() {
-      window.onbeforeunload = ()=> {
-      return "Are you sure you want to leave? Your changes may not be saved oo.";
-    };
-      
-    }
-
-    function releaseTab() {
-      
-    }
-  </script>
-</body>
+    <script src="https://unpkg.com/@tensorflow/tfjs"></script>
+    <script src="https://unpkg.com/face-api.js"></script>
+    <script defer src="/face-api.min.js"></script>
+    <script  defer src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script defer src="/testScript.js"></script>
+  </body>
 </html>
