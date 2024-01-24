@@ -61,10 +61,11 @@ body {
     border: none;
   }
 
-  #question{
+  #questions-container{
     border: solid 2pt whitesmoke;
     height: 50%;
-    background-color: #cccccca1;
+    background-color: #636262a1;
+    color: #ccc;
     
   }
 
@@ -84,9 +85,18 @@ body {
     
   }
 
+  #questions-container{
+    text-align: center;
+
+  }
+
+  #questions-container p{
+   margin-top: 20%;
+  }
+
   #options {
     margin-top: 20px;
-    background-color: #cccccca1;
+    background-color: #636262a1;
     padding: 1%;
    
   }
@@ -103,6 +113,7 @@ body {
     margin: 1%;
     margin-left: 5%;
     border: none;
+    text-align: left;
   }
 
 
