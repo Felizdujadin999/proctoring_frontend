@@ -5,6 +5,8 @@ let timeLeft = 1800;
 const video = document.getElementById("userVideo");
 const canvas = document.getElementById("overlay");
 const userAnswers = [];
+let currentQuestionIndex = 0;
+let theQuestions = null
 
 const startFaceApi = () => {
   Promise.all([
@@ -73,14 +75,14 @@ const startScreenShare = () => {
     });
 };
 
-const startTest = () => {
+const startTest = async () => {
   document.getElementById("startTestButton").style.display = "none";
   document.getElementById("webcamButton").style.display = "none";
   document.getElementById("screenShareButton").style.display = "none";
-  document.getElementById("timer").style.display = "block";
   document.getElementById("questions").style.display = "block";
-  fetchQuestions();
+   await fetchQuestions();
   startTimer();
+  displayQuestion(theQuestions[currentQuestionIndex]);
   lockTab();
 };
 
@@ -95,38 +97,42 @@ const finishTest = () => {
   releaseTab();
 };
 
-
 function decryptQuestions(encryptedData, key) {
   const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, key);
-  const decryptedData = decryptedBytes.toString(CryptoJS.enc.Utf8);
+  const decryptedData = JSON.parse(decryptedBytes.toString(CryptoJS.enc.Utf8));
   return decryptedData;
 }
 
-
 const fetchQuestions = () => {
-  fetch("http://localhost:3000/api/getQuestionKey")
-    .then((response) => response.json())
-    .then((data) => {
-      const encryptedQuestionsKey = data;
+  return new Promise((resolve, reject) => {
+    fetch("http://localhost:3000/api/getQuestionKey")
+      .then((response) => response.json())
+      .then((data) => {
+        const encryptedQuestionsKey = data;
 
-      console.log("this is the key: ", encryptedQuestionsKey);
-     
-      fetch("http://localhost:3000/api/questions")
-        .then((response) => response.json())
-        .then((data) => {
-          const encryptedQuestions = data;
-          console.log("this is encrypted questions: ",encryptedQuestions);
-          const decryptedQuestions = decryptQuestions(encryptedQuestions, encryptedQuestionsKey);
-          console.log("This is the decrypted Questions:", decryptedQuestions);
-        })
-        .catch((error) => {
-          console.error("Error fetching key:", error);
-        });
-    })
-    .catch((error) => {
-      console.error("Error fetching question:", error);
-    });
+        fetch("http://localhost:3000/api/questions")
+          .then((response) => response.json())
+          .then((data) => {
+            const encryptedQuestions = data.encryptQuestions;
+            const decryptedQuestions = decryptQuestions(
+              encryptedQuestions,
+              encryptedQuestionsKey
+            );
+            theQuestions = decryptedQuestions.questionList;
+            resolve(); 
+          })
+          .catch((error) => {
+            console.error("Error fetching question:", error);
+            reject(error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error fetching key:", error);
+        reject(error);
+      });
+  });
 };
+
 
 const quitTest = () => {
   clearInterval(countdownTimer);
@@ -141,8 +147,8 @@ const quitTest = () => {
     document.getElementById("startTestButton").style.display = "none";
     releaseTab();
   } else {
-    // User clicked Cancel, return to the test
-    startTimer(); // Restart the timer if the user cancels quitting
+
+    startTimer(); 
   }
 };
 
@@ -166,11 +172,45 @@ const stopScreenShare = () => {
   screenVideo.srcObject = null;
 };
 
+
 const selectOption = (option) => {
   console.log("Selected Option: " + option);
   userAnswers.push(option);
-  // You can add logic to track the selected option
+  displayNextQuestion();
 };
+
+
+const displayNextQuestion = () => {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < theQuestions.length) {
+    const nextQuestion = theQuestions[currentQuestionIndex];
+    displayQuestion(nextQuestion);
+  } else {
+    finishTest();
+  }
+};
+
+
+const updateOptions = (options) => {
+  const optionButtons = document.querySelectorAll(".option button");
+  options.forEach((option, optionIndex) => {
+    optionButtons[optionIndex].innerHTML = `${String.fromCharCode(65 + optionIndex)} - ${option.text}`;
+    optionButtons[optionIndex].onclick = () => selectOption(String.fromCharCode(65 + optionIndex));
+  });
+};
+
+
+
+const displayQuestion = (question) => {
+  console.log(" i don dey diaplay questions");
+  const questionContainer = document.getElementById("questions-container");
+  questionContainer.innerHTML = `
+    <p>${currentQuestionIndex + 1}. ${question.question}</p>
+  `;
+  updateOptions(question.options);
+};
+
+
 
 const startTimer = () => {
   countdownTimer = setInterval(function () {
@@ -187,12 +227,15 @@ const startTimer = () => {
   }, 1000);
 };
 
+
 const lockTab = () => {
   window.onbeforeunload = () => {
     console.log("this guy dey try commot for here");
-    const notice = "Are you sure you want to leave?";
+    const notice = "";
     return notice;
   };
 };
 
 function releaseTab() {}
+
+
